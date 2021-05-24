@@ -23,40 +23,39 @@ let booksBox = {
   booksIn: 0,
 };
 
-/**
- * Add books to the books box.
- * @param {Integer} numberOfBooksToAdd - The number of book that will be added to the book box.
- */
-function addBooks(numberOfBooksToAdd) {
-  try {
-    if (numberOfBooksToAdd > booksBox.spaces) {
-      if (booksBox.spaces === 0) {
-        throw "A caixa já está cheia";
-      }
-      throw `Só cabem mais ${booksBox.spaces} livro${
-        booksBox.booksIn === 1 ? "" : "s"
-      }`;
-    }
-    booksBox.booksIn += numberOfBooksToAdd;
-    booksBox.spaces -= numberOfBooksToAdd;
-    console.log(`${numberOfBooksToAdd} livro adicionado`);
-    return console.log(
-      `Já há ${booksBox.booksIn} ${
-        booksBox.booksIn === 1 ? "livro" : "livros"
-      } na caixa`
-    );
-  } catch (error) {
-    console.log(error);
+const getPluralOrSingular = (quantity, singular, plural) =>
+  quantity === 1 ? singular : plural
+
+const getAvaliableSpacesMessage = (spaces, booksIn) => {
+  const avaliableSpaces = spaces - booksIn
+  const fitPluralOrSingular =
+    getPluralOrSingular(avaliableSpaces, 'cabe', 'cabem')
+  const bookPluralOrSingular =
+    getPluralOrSingular(avaliableSpaces, 'livro', 'livros')
+    return `Só ${fitPluralOrSingular} mais ${avaliableSpaces} ${bookPluralOrSingular}`
+}
+
+booksBox.addBooks = booksQuantity => {
+  const { spaces } = booksBox
+  const isBoxFilled = booksBox.booksIn === spaces
+  const boxSpacesAreNotEnough = booksBox.booksIn + booksQuantity > spaces
+
+  if (isBoxFilled) {
+    return 'A caixa já está cheia'
   }
+  
+  if (boxSpacesAreNotEnough) {
+    return getAvaliableSpacesMessage(spaces, booksBox.booksIn)
+  }
+
+  booksBox.booksIn += booksQuantity
+
+  const bookPluralOrSingular =
+    getPluralOrSingular(booksBox.booksIn, 'livro', 'livros')
+  return `Já há ${booksBox.booksIn} ${bookPluralOrSingular} na caixa`
 }
 
-function getRandomIntInclusive(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-addBooks(getRandomIntInclusive(1, 5));
-addBooks(getRandomIntInclusive(1, 5));
-addBooks(getRandomIntInclusive(1, 5));
-addBooks(getRandomIntInclusive(1, 5));
+// console.log(booksBox.addBooks(1))
+console.log(booksBox.addBooks(4))
+console.log(booksBox.addBooks(3))
+console.log(booksBox)
