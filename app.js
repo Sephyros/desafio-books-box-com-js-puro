@@ -20,5 +20,43 @@
 
 let booksBox = {
   spaces: 5,
-  booksIn: 0
+  booksIn: 0,
+};
+
+/**
+ * Add books to the books box.
+ * @param {Integer} numberOfBooksToAdd - The number of book that will be added to the book box.
+ */
+function addBooks(numberOfBooksToAdd) {
+  try {
+    if (numberOfBooksToAdd > booksBox.spaces) {
+      if (booksBox.spaces === 0) {
+        throw "A caixa já está cheia";
+      }
+      throw `Só cabem mais ${booksBox.spaces} livro${
+        booksBox.booksIn === 1 ? "" : "s"
+      }`;
+    }
+    booksBox.booksIn += numberOfBooksToAdd;
+    booksBox.spaces -= numberOfBooksToAdd;
+    console.log(`${numberOfBooksToAdd} livro adicionado`);
+    return console.log(
+      `Já há ${booksBox.booksIn} ${
+        booksBox.booksIn === 1 ? "livro" : "livros"
+      } na caixa`
+    );
+  } catch (error) {
+    console.log(error);
+  }
 }
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+addBooks(getRandomIntInclusive(1, 5));
+addBooks(getRandomIntInclusive(1, 5));
+addBooks(getRandomIntInclusive(1, 5));
+addBooks(getRandomIntInclusive(1, 5));
